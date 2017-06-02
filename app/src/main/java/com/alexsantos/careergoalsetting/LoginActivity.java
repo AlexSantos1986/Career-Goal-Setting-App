@@ -55,8 +55,20 @@ public class LoginActivity extends AppCompatActivity {
                 startLogin();
             }
         });
+        mRegisterNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToRegister();
+            }
+        });
     }
 
+    public void sendToRegister(){
+
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
 
     public void startLogin(){
