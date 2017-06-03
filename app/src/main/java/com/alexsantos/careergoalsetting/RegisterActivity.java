@@ -1,4 +1,7 @@
 package com.alexsantos.careergoalsetting;
+/**
+ * Created by Alex on 02/06/2017.
+ */
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -51,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
+
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,45 +63,53 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        linkToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent loginLinkIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                loginLinkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(loginLinkIntent);
+            }
+        });
 
     }
 
     public void register(){
 
+
         final String name = mUserName.getText().toString().trim();
         String email = mUserEmail.getText().toString().trim();
         String password = mUserPassword.getText().toString().trim();
 
-
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
-            progressDialog.setMessage("Signing up...");
+            progressDialog.setMessage("Signing Up...");
             progressDialog.show();
 
-            mAuth.createUserWithEmailAndPassword(name,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if(task.isSuccessful()){
-
-                        String user_Id = mAuth.getCurrentUser().getUid();
-                        DatabaseReference currentUser = mDatabase.child(user_Id);
+                        String user_id = mAuth.getCurrentUser().getUid();
+                        DatabaseReference currentUser = mDatabase.child(user_id);
                         currentUser.child("name").setValue(name);
 
                         progressDialog.dismiss();
 
-                        Intent registerIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(registerIntent);
-                    }else{
+                        Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
 
-                        Toast.makeText(RegisterActivity.this,"Account Failed Please try again!",Toast.LENGTH_SHORT).show();
+                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(mainIntent);
+                    }else{
+                        Toast.makeText(RegisterActivity.this,"Account Failed to login",Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }else{
 
+        }else{
             Toast.makeText(RegisterActivity.this,"Fields can't be blank",Toast.LENGTH_SHORT).show();
         }
+
     }
 }

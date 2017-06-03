@@ -1,5 +1,9 @@
 package com.alexsantos.careergoalsetting;
 
+/**
+ * Created by Alex on 02/06/2017.
+ */
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +60,18 @@ public class LoginActivity extends AppCompatActivity {
                 startLogin();
             }
         });
+
         mRegisterNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendToRegister();
+                Intent sendToRegisterIntent =  new Intent(LoginActivity.this, RegisterActivity.class);
+                sendToRegisterIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(sendToRegisterIntent);
             }
         });
     }
 
-    public void sendToRegister(){
-
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-
+    // method called by the sign in button
     public void startLogin(){
 
         String email = mEmail.getText().toString().trim();
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         checkExist();
                     }else{
-                        Toast.makeText(LoginActivity.this, "Error for loging in",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Email or password is incorrect",Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -96,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+    //method called if the task id successfull it will ckeck if the user id alrealdy exist in the database
     public void checkExist(){
 
         final String user_Id = mAuth.getCurrentUser().getUid();
