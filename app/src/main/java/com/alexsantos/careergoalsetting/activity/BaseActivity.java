@@ -35,7 +35,7 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase("https://career-goal-setting-cb029.firebaseio.com/");
+        myFirebaseRef = new Firebase(Constant.FIREBASE_URL);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,7 +61,7 @@ public class BaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.searchGoal).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.pesqContato).getActionView();
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
@@ -108,7 +108,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     protected void buildSearchListView(String query) {
-        Query queryRef = myFirebaseRef.startAt(query).endAt(query+"\uf8ff").orderByChild("name");
+        Query queryRef = myFirebaseRef.startAt(query).endAt(query+"\uf8ff").orderByChild("description");
         mAdapter = new CareerFirebaseAdapter(this, queryRef);
         list.setAdapter(mAdapter);
     }

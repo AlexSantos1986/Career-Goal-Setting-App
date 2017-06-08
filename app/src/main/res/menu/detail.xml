@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/saveCareer"
+        android:id="@+id/saveContact"
         app:showAsAction="always"
         android:icon="@mipmap/ic_launcher"
         android:title="Save"
-    />
+        />
 
     <item
-
-        android:id="@+id/delCareer"
+        android:id="@+id/delContact"
         app:showAsAction="always"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_round"
         android:title="Delete"
         />
 

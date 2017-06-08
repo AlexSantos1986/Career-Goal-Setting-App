@@ -25,8 +25,8 @@ public class DetailActivity extends AppCompatActivity {
     private String FirebaseID;
     private Firebase myFirebaseRef;
 
-    EditText descriptionText;
-    EditText dateText;
+    private EditText descriptionText;
+    private EditText dateText;
 
 
     @Override
@@ -47,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
             Firebase refCareer = myFirebaseRef.child(FirebaseID);
 
 
-            ValueEventListener refCareerListener = refCareer.addValueEventListener(new ValueEventListener() {
+            final ValueEventListener refCareerListener = refCareer.addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
@@ -69,6 +69,7 @@ public class DetailActivity extends AppCompatActivity {
                     Log.e("LOG", firebaseError.getMessage());
                 }
 
+
             });
 
 
@@ -81,7 +82,7 @@ public class DetailActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.detail, menu);
         if(FirebaseID == null){
-            MenuItem item = menu.findItem(R.id.delCareer);
+            MenuItem item = menu.findItem(R.id.delContact);
             item.setVisible(false);
         }
         return true;
@@ -91,12 +92,11 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch(item.getItemId()){
-            case R.id.saveCareer:
+            case R.id.saveContact:
 
                 save();
-
                 return true;
-            case R.id.delCareer:
+            case R.id.delContact:
                 myFirebaseRef.child(FirebaseID).removeValue();
                 Toast.makeText(getApplicationContext(), "Contact successfully deleted", Toast.LENGTH_SHORT).show();
                 finish();
@@ -117,7 +117,8 @@ public class DetailActivity extends AppCompatActivity {
             career.setDescription(description);
             career.setDate(date);
 
-            myFirebaseRef.child("Career Goal User").setValue(career);
+
+            myFirebaseRef.push().setValue(career);
             Toast.makeText(this, "Contact successfully Added!!!", Toast.LENGTH_SHORT).show();
         } else {
 

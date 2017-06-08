@@ -21,7 +21,7 @@ public class MainActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
 
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity{
             }
         });
 
-      buildListView();
+        buildListView();
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -49,11 +49,14 @@ public class MainActivity extends BaseActivity{
                 }
             }
         };
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
     }
+
 }
