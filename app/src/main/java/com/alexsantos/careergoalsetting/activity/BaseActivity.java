@@ -108,7 +108,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     protected void buildSearchListView(String query) {
-        Query queryRef = myFirebaseRef.startAt(query).endAt(query+"\uf8ff").orderByChild("description");
+        Query queryRef = myFirebaseRef.startAt(query).endAt(query+"\uf8ff").orderByChild("name");
         mAdapter = new CareerFirebaseAdapter(this, queryRef);
         list.setAdapter(mAdapter);
     }
