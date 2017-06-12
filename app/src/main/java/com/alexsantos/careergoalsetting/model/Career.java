@@ -10,6 +10,7 @@ public class Career {
 
     private String description;
     private String date;
+    private String title;
 
 
     public Career(){
@@ -30,6 +31,15 @@ public class Career {
     public String getDate(){
 
         return date;
+    }
+
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public String getTitle(){
+
+        return title;
     }
 
 }

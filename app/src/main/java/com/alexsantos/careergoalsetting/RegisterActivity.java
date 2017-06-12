@@ -98,8 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                         progressDialog.dismiss();
 
                         Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainIntent);
                     }else{
                         Toast.makeText(RegisterActivity.this,"Account Failed to login",Toast.LENGTH_SHORT).show();

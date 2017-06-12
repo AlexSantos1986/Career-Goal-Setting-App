@@ -27,7 +27,8 @@
                 android:value=".SearchActivity" />
         </activity>
 
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".LoginActivity"/>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
@@ -41,8 +42,8 @@
         <activity
             android:name=".activity.DetailActivity"
             android:label="@string/title_activity_detalhe"
-            android:theme="@style/AppTheme.NoActionBar" />
-
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activity.MainActivity"/>
 
         <activity
             android:name=".activity.SearchActivity"

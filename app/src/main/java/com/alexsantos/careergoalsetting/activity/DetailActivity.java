@@ -1,14 +1,20 @@
 package com.alexsantos.careergoalsetting.activity;
 
+import android.content.Intent;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alexsantos.careergoalsetting.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
 import com.alexsantos.careergoalsetting.model.Career;
 import com.alexsantos.careergoalsetting.utils.Constant;
@@ -16,6 +22,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Date;
 
@@ -24,9 +31,10 @@ public class DetailActivity extends AppCompatActivity {
     private Career career;
     private String FirebaseID;
     private Firebase myFirebaseRef;
-
-    private EditText descriptionText;
+    private EditText titleText;
+    private AutoCompleteTextView descriptionText;
     private EditText dateText;
+
 
 
     @Override
@@ -40,6 +48,9 @@ public class DetailActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Add your Goal");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         if (getIntent().hasExtra("FirebaseID")) {
 
@@ -51,15 +62,18 @@ public class DetailActivity extends AppCompatActivity {
 
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    career = snapshot.getValue(Career.class);
 
+                    career = snapshot.getValue(Career.class);
                     if ( career != null) {
-                      descriptionText = (EditText) findViewById(R.id.editText1);
+
+                        titleText = (EditText) findViewById(R.id.editText3);
+                        titleText.setText(career.getTitle());
+
+                        descriptionText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
                         descriptionText.setText(career.getDescription());
 
                         dateText = (EditText) findViewById(R.id.editText2);
                         dateText.setText(career.getDate());
-
 
                     }
                 }
@@ -95,12 +109,16 @@ public class DetailActivity extends AppCompatActivity {
             case R.id.saveContact:
 
                 save();
+
                 return true;
             case R.id.delContact:
+
                 myFirebaseRef.child(FirebaseID).removeValue();
                 Toast.makeText(getApplicationContext(), "Contact successfully deleted", Toast.LENGTH_SHORT).show();
                 finish();
+
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -108,12 +126,14 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void save() {
-        String description = ((EditText) findViewById(R.id.editText1)).getText().toString();
+        String description = ((AutoCompleteTextView) findViewById(R.id.autoCompleteTextView)).getText().toString();
         String date = ((EditText) findViewById(R.id.editText2)).getText().toString();
+        String title = ((EditText) findViewById(R.id.editText3)).getText().toString();
 
 
         if (career == null) {
             career = new Career();
+            career.setTitle(title);
             career.setDescription(description);
             career.setDate(date);
 
@@ -122,6 +142,7 @@ public class DetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Contact successfully Added!!!", Toast.LENGTH_SHORT).show();
         } else {
 
+            career.setTitle(title);
             career.setDescription(description);
             career.setDate(date);
 

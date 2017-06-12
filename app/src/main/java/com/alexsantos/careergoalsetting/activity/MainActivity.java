@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.alexsantos.careergoalsetting.LoginActivity;
@@ -44,8 +46,9 @@ public class MainActivity extends BaseActivity{
 
                 if(firebaseAuth.getCurrentUser() == null) {
                     Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(mainIntent);
+                    finish();
                 }
             }
         };
@@ -59,4 +62,27 @@ public class MainActivity extends BaseActivity{
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.logoutButton){
+
+            FirebaseAuth.getInstance().signOut();
+            Intent sigoutIntent = new Intent(MainActivity.this , LoginActivity.class);
+            startActivity(sigoutIntent);
+            finish();
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }

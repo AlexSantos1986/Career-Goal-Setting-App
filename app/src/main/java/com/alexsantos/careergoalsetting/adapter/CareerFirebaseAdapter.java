@@ -34,6 +34,7 @@ public class CareerFirebaseAdapter extends FirebaseListAdapter<Career> {
     protected void populateView(View view, Career career, int position) {
         ((TextView)view.findViewById(R.id.description)).setText(career.getDescription());
         ((TextView)view.findViewById(R.id.date)).setText(career.getDate());
+        ((TextView)view.findViewById(R.id.title)).setText(career.getTitle());
 
     }
 }

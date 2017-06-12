@@ -3,6 +3,7 @@
     <item
         android:id="@+id/delete_item"
         android:title="Remove Goal"
+
         />
 
 </menu>
