@@ -1,9 +1,13 @@
 package com.alexsantos.careergoalsetting.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alexsantos.careergoalsetting.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
 import com.alexsantos.careergoalsetting.model.Career;
 import com.firebase.client.Firebase;
@@ -14,7 +18,6 @@ import com.firebase.ui.FirebaseListAdapter;
  */
 
 public class CareerFirebaseAdapter extends FirebaseListAdapter<Career> {
-
 
 
     static final Class<Career> modelClass= Career.class;
@@ -36,5 +39,8 @@ public class CareerFirebaseAdapter extends FirebaseListAdapter<Career> {
         ((TextView)view.findViewById(R.id.date)).setText(career.getDate());
         ((TextView)view.findViewById(R.id.title)).setText(career.getTitle());
 
+
+
     }
+
 }

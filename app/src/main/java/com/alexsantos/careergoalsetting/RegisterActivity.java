@@ -19,14 +19,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
+
 
     private EditText mUserName;
     private EditText mUserEmail;
@@ -43,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
         mUserName = (EditText) findViewById(R.id.userNameText);
@@ -67,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent loginLinkIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-                loginLinkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                loginLinkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(loginLinkIntent);
             }
         });
@@ -84,6 +87,8 @@ public class RegisterActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
             progressDialog.setMessage("Signing Up...");
+            progressDialog.setMessage("Please wait while we create your account");
+            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
 
             mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -91,17 +96,37 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if(task.isSuccessful()){
-                        String user_id = mAuth.getCurrentUser().getUid();
-                        DatabaseReference currentUser = mDatabase.child(user_id);
-                        currentUser.child("name").setValue(name);
 
-                        progressDialog.dismiss();
+                        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                        String user_id = current_user.getUid();
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
-                        Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(mainIntent);
+                        HashMap<String, String> userMap = new HashMap<String, String>();
+
+                        userMap.put("name",name);
+                        userMap.put("status","I'm using career goal setting app!!!");
+                        userMap.put("image","default");
+                        userMap.put("thumb_image","default");
+
+                        mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if(task.isSuccessful()){
+                                    progressDialog.dismiss();
+
+                                    Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(mainIntent);
+                                    finish();
+                                }
+
+                            }
+                        });
+
                     }else{
-                        Toast.makeText(RegisterActivity.this,"Account Failed to login",Toast.LENGTH_SHORT).show();
+                        progressDialog.hide();
+                        Toast.makeText(RegisterActivity.this,"Cannot Sigin. Please check the form and try again",Toast.LENGTH_SHORT).show();
                     }
                 }
             });

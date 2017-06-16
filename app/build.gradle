@@ -32,6 +32,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -40,6 +41,8 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.4.1'
     compile 'com.firebaseui:firebase-ui:0.3.0'
     compile 'com.google.android.gms:play-services-appindexing:9.0.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

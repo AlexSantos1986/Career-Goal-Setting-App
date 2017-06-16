@@ -51,7 +51,7 @@ public class SplashScreenActivity extends Activity {
             public void onAnimationEnd(Animation animation) {
                 imageView.startAnimation(animation_3);
                 finish();
-                Intent i = new Intent(getBaseContext(),MainActivity.class);
+                Intent i = new Intent(getBaseContext(),MainActivity.class);// change to login activity
                 startActivity(i);
             }
 

@@ -7,27 +7,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alexsantos.careergoalsetting.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
 import com.alexsantos.careergoalsetting.adapter.CareerFirebaseAdapter;
+import com.alexsantos.careergoalsetting.model.Career;
 import com.alexsantos.careergoalsetting.utils.Constant;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 
+import java.util.ArrayList;
+
 public class BaseActivity extends AppCompatActivity {
 
+    private static final String TAG ="test" ;
     private ListView list;
     protected SearchView searchView;
     private CareerFirebaseAdapter mAdapter;
     private Firebase myFirebaseRef;
+    private String FirebaseID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +53,24 @@ public class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         list = (ListView) findViewById(R.id.listView);
+        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View arg1, int arg2,
-                                    long arg3) {
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
 
                 Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
 
-                inte.putExtra("FirebaseID", mAdapter.getRef(arg2).getKey());
+                inte.putExtra("FirebaseID", mAdapter.getRef(position).getKey());
                 startActivityForResult(inte, 0);
+
+
             }
         });
+
 
         registerForContextMenu(list);
 
@@ -84,8 +103,8 @@ public class BaseActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         CareerFirebaseAdapter adapter = (CareerFirebaseAdapter) list.getAdapter();
 
-        String FirebaseID = adapter.getRef(info.position).getKey().toString();
 
+        FirebaseID = adapter.getRef(info.position).getKey().toString();
 
         switch (item.getItemId()) {
             case R.id.delete_item:

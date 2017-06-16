@@ -1,20 +1,16 @@
 package com.alexsantos.careergoalsetting.activity;
 
-import android.content.Intent;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.alexsantos.careergoalsetting.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
 import com.alexsantos.careergoalsetting.model.Career;
 import com.alexsantos.careergoalsetting.utils.Constant;
@@ -22,9 +18,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Date;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -34,13 +27,15 @@ public class DetailActivity extends AppCompatActivity {
     private EditText titleText;
     private AutoCompleteTextView descriptionText;
     private EditText dateText;
-
+    private Button button;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        button = (Button) findViewById(R.id.button);
 
         Firebase.setAndroidContext(this);
 
@@ -64,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot snapshot) {
 
                     career = snapshot.getValue(Career.class);
-                    if ( career != null) {
+                    if (career != null) {
 
                         titleText = (EditText) findViewById(R.id.editText3);
                         titleText.setText(career.getTitle());
@@ -89,13 +84,13 @@ public class DetailActivity extends AppCompatActivity {
 
         }
 
-     }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.detail, menu);
-        if(FirebaseID == null){
+        if (FirebaseID == null) {
             MenuItem item = menu.findItem(R.id.delContact);
             item.setVisible(false);
         }
@@ -105,7 +100,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.saveContact:
 
                 save();
@@ -154,4 +149,7 @@ public class DetailActivity extends AppCompatActivity {
 
         finish();
     }
+
+
+
 }
