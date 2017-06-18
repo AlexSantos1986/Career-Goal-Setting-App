@@ -13,11 +13,13 @@ import com.alexsantos.careergoalsetting.model.Career;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 import com.firebase.ui.FirebaseListAdapter;
+import com.google.firebase.database.DatabaseReference;
+
 /**
  * Created by Alex on 05/06/2017.
  */
 
-public class CareerFirebaseAdapter extends FirebaseListAdapter<Career> {
+/*public class CareerFirebaseAdapter extends FirebaseListAdapter<Career> {
 
 
     static final Class<Career> modelClass= Career.class;
@@ -44,3 +46,4 @@ public class CareerFirebaseAdapter extends FirebaseListAdapter<Career> {
     }
 
 }
+*/

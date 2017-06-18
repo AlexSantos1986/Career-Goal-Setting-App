@@ -20,25 +20,32 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.alexsantos.careergoalsetting.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
-import com.alexsantos.careergoalsetting.adapter.CareerFirebaseAdapter;
 import com.alexsantos.careergoalsetting.model.Career;
 import com.alexsantos.careergoalsetting.utils.Constant;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
+import com.firebase.ui.FirebaseListAdapter;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import static com.alexsantos.careergoalsetting.R.layout.career;
+
 public class BaseActivity extends AppCompatActivity {
 
-    private static final String TAG ="test" ;
     private ListView list;
     protected SearchView searchView;
-    private CareerFirebaseAdapter mAdapter;
-    private Firebase myFirebaseRef;
+    Career careerModel;
     private String FirebaseID;
+    FirebaseUser  mCurrentUser;
+    Firebase mDatabaseRef;
+    FirebaseListAdapter <Career> mAdapter;
 
 
     @Override
@@ -46,14 +53,35 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase(Constant.FIREBASE_URL);
+       Firebase.setAndroidContext(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         list = (ListView) findViewById(R.id.listView);
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        String current_uid = mCurrentUser.getUid();
+
+        mDatabaseRef = new Firebase(Constant.FIREBASE_URL).child("Users").child(current_uid).child("description");
+
+        //mDatabaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(Constant.FIREBASE_URL).child("description").child(current_uid);
+
+        mAdapter = new FirebaseListAdapter<Career>(
+                this,
+                Career.class,
+                R.layout.career,mDatabaseRef
+                ) {
+            @Override
+            protected void populateView(View view, Career career, int position) {
+                ((TextView)view.findViewById(R.id.description)).setText(career.getDescription());
+                ((TextView)view.findViewById(R.id.date)).setText(career.getDate());
+                ((TextView)view.findViewById(R.id.title)).setText(career.getTitle());
+            }
+        };
+
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,7 +91,6 @@ public class BaseActivity extends AppCompatActivity {
                                     long id) {
 
                 Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
-
                 inte.putExtra("FirebaseID", mAdapter.getRef(position).getKey());
                 startActivityForResult(inte, 0);
 
@@ -101,14 +128,14 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        CareerFirebaseAdapter adapter = (CareerFirebaseAdapter) list.getAdapter();
+        list.getAdapter();
 
 
-        FirebaseID = adapter.getRef(info.position).getKey().toString();
+        FirebaseID = mAdapter.getRef(info.position).getKey().toString();
 
         switch (item.getItemId()) {
             case R.id.delete_item:
-                myFirebaseRef.child(FirebaseID).removeValue();
+                mDatabaseRef.child(FirebaseID).removeValue();
                 Toast.makeText(getApplicationContext(), "Contact Successfully deleted", Toast.LENGTH_SHORT).show();
                 return true;
         }
@@ -116,19 +143,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
-
     public void buildListView() {
-        mAdapter = new CareerFirebaseAdapter(this, myFirebaseRef);
+        Toast.makeText(getApplication(), "Not Working", Toast.LENGTH_LONG).show();
         list.setAdapter(mAdapter);
 
 
     }
 
-
     protected void buildSearchListView(String query) {
-        Query queryRef = myFirebaseRef.startAt(query).endAt(query+"\uf8ff").orderByChild("name");
-        mAdapter = new CareerFirebaseAdapter(this, queryRef);
         list.setAdapter(mAdapter);
     }
 

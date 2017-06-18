@@ -18,6 +18,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
+/**
+ * Created by Alex on 17/06/2017.
+ */
 public class SettingsActivity extends AppCompatActivity {
 
 

@@ -19,6 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * Created by Alex on 17/06/2017.
+ */
 public class StatusActivity extends AppCompatActivity {
 
     private Toolbar mToobar;

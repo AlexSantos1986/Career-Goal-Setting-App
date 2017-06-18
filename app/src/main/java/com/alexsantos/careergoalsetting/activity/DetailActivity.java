@@ -1,5 +1,6 @@
 package com.alexsantos.careergoalsetting.activity;
 
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,16 +19,25 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
 
     private Career career;
     private String FirebaseID;
-    private Firebase myFirebaseRef;
     private EditText titleText;
     private AutoCompleteTextView descriptionText;
     private EditText dateText;
     private Button button;
+    private DatabaseReference myDatabaseRef;
+    FirebaseUser mCurrentUser;
 
 
     @Override
@@ -35,31 +45,40 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        button = (Button) findViewById(R.id.button);
 
-        Firebase.setAndroidContext(this);
+       Firebase.setAndroidContext(this);
 
-        myFirebaseRef = new Firebase(Constant.FIREBASE_URL);
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        String current_uid = mCurrentUser.getUid();
+
+
+        myDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid).child("description");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Add your Goal");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        button = (Button) findViewById(R.id.button);
+
 
         if (getIntent().hasExtra("FirebaseID")) {
 
             FirebaseID = getIntent().getStringExtra("FirebaseID");
-            Firebase refCareer = myFirebaseRef.child(FirebaseID);
+            DatabaseReference refCareer = myDatabaseRef.child(FirebaseID);
 
 
-            final ValueEventListener refCareerListener = refCareer.addValueEventListener(new ValueEventListener() {
 
+             refCareer.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot snapshot) {
+                public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
 
-                    career = snapshot.getValue(Career.class);
+                    career = dataSnapshot.getValue(Career.class);
                     if (career != null) {
+
+                        HashMap<String, Career> userMap = new HashMap<String, Career>();
+
+
 
                         titleText = (EditText) findViewById(R.id.editText3);
                         titleText.setText(career.getTitle());
@@ -70,20 +89,21 @@ public class DetailActivity extends AppCompatActivity {
                         dateText = (EditText) findViewById(R.id.editText2);
                         dateText.setText(career.getDate());
 
+                        userMap.put("description",career);
+
+
                     }
+
                 }
 
                 @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                    Log.e("LOG", firebaseError.getMessage());
-                }
+                public void onCancelled(DatabaseError databaseError) {
 
+                }
 
             });
 
-
         }
-
     }
 
     @Override
@@ -108,7 +128,7 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
             case R.id.delContact:
 
-                myFirebaseRef.child(FirebaseID).removeValue();
+                myDatabaseRef.child(FirebaseID).removeValue();
                 Toast.makeText(getApplicationContext(), "Contact successfully deleted", Toast.LENGTH_SHORT).show();
                 finish();
 
@@ -133,7 +153,7 @@ public class DetailActivity extends AppCompatActivity {
             career.setDate(date);
 
 
-            myFirebaseRef.push().setValue(career);
+            myDatabaseRef.push().setValue(career);
             Toast.makeText(this, "Contact successfully Added!!!", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -142,14 +162,13 @@ public class DetailActivity extends AppCompatActivity {
             career.setDate(date);
 
 
-            myFirebaseRef.child(FirebaseID).setValue(career);
+            myDatabaseRef.child(FirebaseID).setValue(career);
 
             Toast.makeText(this, "Contact successfully Edited!!!", Toast.LENGTH_SHORT).show();
         }
 
         finish();
     }
-
 
 
 }
