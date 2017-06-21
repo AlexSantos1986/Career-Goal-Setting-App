@@ -1,6 +1,7 @@
 package com.alexsantos.careergoalsetting.activity;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 public class SettingsActivity extends AppCompatActivity {
 
 
+    private static final int PICK_IMAGE_REQUEST = 1;
     DatabaseReference mDatabaseRef;
     FirebaseUser mCurrentUser;
 
@@ -81,6 +83,19 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent statusIntent = new Intent(SettingsActivity.this, StatusActivity.class);
                 statusIntent.putExtra("status_value",statusValue);
                 startActivity(statusIntent);
+            }
+        });
+
+
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
             }
         });
 
