@@ -7,8 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
@@ -35,7 +38,7 @@ public class DetailActivity extends AppCompatActivity {
     private EditText titleText;
     private AutoCompleteTextView descriptionText;
     private EditText dateText;
-    private Button button;
+    private CheckBox checkBox ;
     private DatabaseReference myDatabaseRef;
     FirebaseUser mCurrentUser;
 
@@ -56,10 +59,9 @@ public class DetailActivity extends AppCompatActivity {
         myDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid).child("description");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Add your Goal");
+        setTitle("Your Goal");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        button = (Button) findViewById(R.id.button);
 
 
         if (getIntent().hasExtra("FirebaseID")) {
@@ -79,6 +81,8 @@ public class DetailActivity extends AppCompatActivity {
                         HashMap<String, Career> userMap = new HashMap<String, Career>();
 
 
+                        //checkBox = (CheckBox)(findViewById(R.id.checkBox1));
+                        //checkBox.setChecked(career.isChecked());
 
                         titleText = (EditText) findViewById(R.id.editText3);
                         titleText.setText(career.getTitle());
@@ -148,13 +152,15 @@ public class DetailActivity extends AppCompatActivity {
 
         if (career == null) {
             career = new Career();
+
             career.setTitle(title);
             career.setDescription(description);
             career.setDate(date);
 
 
+
             myDatabaseRef.push().setValue(career);
-            Toast.makeText(this, "Contact successfully Added!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Information successfully Added!!!", Toast.LENGTH_SHORT).show();
         } else {
 
             career.setTitle(title);
@@ -164,7 +170,7 @@ public class DetailActivity extends AppCompatActivity {
 
             myDatabaseRef.child(FirebaseID).setValue(career);
 
-            Toast.makeText(this, "Contact successfully Edited!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Information successfully Edited!!!", Toast.LENGTH_SHORT).show();
         }
 
         finish();

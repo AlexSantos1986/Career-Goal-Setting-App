@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#673AB7"
     tools:context="com.alexsantos.careergoalsetting.StatusActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/appBarLayout">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_status"
@@ -22,19 +23,29 @@
     </android.support.design.widget.AppBarLayout>
 
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/alex" />
+
 
     <Button
         android:id="@+id/setting_status_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp"
-        android:text="Save Changes"
+        android:layout_alignEnd="@+id/textInputLayout"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginEnd="11dp"
+        android:background="@color/colorAccent"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="Save Changes"
+        android:textColor="@android:color/background_light" />
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/setting_status_button"
@@ -46,8 +57,8 @@
 
         <EditText
             android:id="@+id/text_input_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="355dp"
+            android:layout_height="83dp"
             android:hint="Your Status" />
     </android.support.design.widget.TextInputLayout>
 

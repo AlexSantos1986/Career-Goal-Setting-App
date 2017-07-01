@@ -41,7 +41,6 @@ public class BaseActivity extends AppCompatActivity {
 
     private ListView list;
     protected SearchView searchView;
-    Career careerModel;
     private String FirebaseID;
     FirebaseUser  mCurrentUser;
     Firebase mDatabaseRef;
@@ -55,19 +54,18 @@ public class BaseActivity extends AppCompatActivity {
 
        Firebase.setAndroidContext(this);
 
+      mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+      String current_uid = mCurrentUser.getUid();
+
+        mDatabaseRef = new Firebase(Constant.FIREBASE_URL).child("Users").child(current_uid).child("description");
+       // mDatabaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(Constant.FIREBASE_URL).child("description").child(current_uid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         list = (ListView) findViewById(R.id.listView);
+        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        String current_uid = mCurrentUser.getUid();
-
-        mDatabaseRef = new Firebase(Constant.FIREBASE_URL).child("Users").child(current_uid).child("description");
-
-        //mDatabaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(Constant.FIREBASE_URL).child("description").child(current_uid);
 
         mAdapter = new FirebaseListAdapter<Career>(
                 this,
@@ -76,30 +74,34 @@ public class BaseActivity extends AppCompatActivity {
                 ) {
             @Override
             protected void populateView(View view, Career career, int position) {
-                ((TextView)view.findViewById(R.id.description)).setText(career.getDescription());
+                //((CheckBox)view.findViewById(R.id.checkBox1)).setChecked(career.isChecked());
                 ((TextView)view.findViewById(R.id.date)).setText(career.getDate());
                 ((TextView)view.findViewById(R.id.title)).setText(career.getTitle());
+
             }
         };
 
 
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-
-                Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
-                inte.putExtra("FirebaseID", mAdapter.getRef(position).getKey());
-                startActivityForResult(inte, 0);
 
 
-            }
-        });
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position,
+                                        long id) {
 
 
-        registerForContextMenu(list);
+                    Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
+                    inte.putExtra("FirebaseID", mAdapter.getRef(position).getKey());
+                    startActivityForResult(inte, 0);
+                }
+
+
+            });
+
+            registerForContextMenu(list);
+        //Toast.makeText(BaseActivity.this,  list.getAdapter().getCount(), Toast.LENGTH_SHORT).show();
 
     }
     @Override
@@ -144,9 +146,8 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void buildListView() {
-        Toast.makeText(getApplication(), "Not Working", Toast.LENGTH_LONG).show();
-        list.setAdapter(mAdapter);
 
+        list.setAdapter(mAdapter);
 
     }
 

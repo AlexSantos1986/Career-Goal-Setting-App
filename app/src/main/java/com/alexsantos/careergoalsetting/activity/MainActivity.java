@@ -32,7 +32,6 @@ public class MainActivity extends BaseActivity{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("CheckList");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 
@@ -92,8 +91,7 @@ public class MainActivity extends BaseActivity{
                 finish();
 
                 return true;
-
-            default:
+         default:
                 return super.onOptionsItemSelected(item);
         }
     }

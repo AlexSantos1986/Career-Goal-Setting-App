@@ -1,5 +1,7 @@
 package com.alexsantos.careergoalsetting.model;
 
+import android.view.View;
+
 import java.util.Date;
 
 /**
@@ -13,9 +15,12 @@ public class Career {
     private String title;
 
 
+
+
     public Career(){
 
     }
+
 
     public void setDescription(String description){
         this.description = description;
@@ -27,6 +32,8 @@ public class Career {
     public String getDescription(){
         return description;
     }
+
+
 
     public String getDate(){
 

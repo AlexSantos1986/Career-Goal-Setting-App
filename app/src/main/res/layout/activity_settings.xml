@@ -4,41 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
+    android:background="#673AB7"
     tools:context="com.alexsantos.careergoalsetting.activity.SettingsActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_setting"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/listPreferredItemHeight"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <com.github.siyamed.shapeimageview.CircularImageView
         android:id="@+id/circularImageView"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:src="@drawable/avatar_profile"
-        android:layout_above="@+id/display_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="47dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/setting_status_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/setting_status_button"
+        android:layout_marginTop="95dp"
+        android:src="@drawable/avatar_profile" />
 
     <TextView
         android:id="@+id/display_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Display Name"
-        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:text="Display Name"
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/setting_status_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/display_name"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="35dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="26dp"
+        android:gravity="center_horizontal"
         android:paddingBottom="10dp"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:paddingTop="10dp"
         android:text="@string/default_status"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/setting_status_button"
@@ -51,7 +73,8 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="Change Status"
-        android:textColor="@color/common_google_signin_btn_text_dark_default" />
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColorLink="#F44336" />
 
     <Button
         android:id="@+id/setting_image_button"
@@ -67,6 +90,8 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="CHANGE IMAGE"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        tools:ignore="HardcodedText" />
+
 
 </RelativeLayout>
