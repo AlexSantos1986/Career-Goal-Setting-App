@@ -27,22 +27,25 @@
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
-        android:src="@drawable/alex" />
+        android:layout_marginBottom="13dp"
+        android:src="@drawable/alex"
+        android:layout_above="@+id/textInputLayout"
+        android:layout_centerHorizontal="true" />
 
 
     <Button
         android:id="@+id/setting_status_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textInputLayout"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="11dp"
+        android:layout_marginEnd="21dp"
         android:background="@color/colorAccent"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         android:text="Save Changes"
-        android:textColor="@android:color/background_light" />
+        android:textColor="@android:color/background_light"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/textInputLayout"
+        android:layout_marginBottom="167dp" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout"

@@ -1,5 +1,6 @@
 package com.alexsantos.careergoalsetting.activity;
 
+import android.app.DatePickerDialog;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,8 +30,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -41,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
     private CheckBox checkBox ;
     private DatabaseReference myDatabaseRef;
     FirebaseUser mCurrentUser;
+    private Calendar myCalendar;
 
 
     @Override
@@ -48,6 +54,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        myCalendar = Calendar.getInstance();
 
        Firebase.setAndroidContext(this);
 
@@ -61,9 +68,6 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Your Goal");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
         if (getIntent().hasExtra("FirebaseID")) {
 
             FirebaseID = getIntent().getStringExtra("FirebaseID");
@@ -71,34 +75,57 @@ public class DetailActivity extends AppCompatActivity {
 
 
 
-             refCareer.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
-                @Override
-                public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+         refCareer.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
 
-                    career = dataSnapshot.getValue(Career.class);
-                    if (career != null) {
+                career = dataSnapshot.getValue(Career.class);
+                if (career != null) {
 
-                        HashMap<String, Career> userMap = new HashMap<String, Career>();
-
-
-                        //checkBox = (CheckBox)(findViewById(R.id.checkBox1));
-                        //checkBox.setChecked(career.isChecked());
-
-                        titleText = (EditText) findViewById(R.id.editText3);
-                        titleText.setText(career.getTitle());
-
-                        descriptionText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-                        descriptionText.setText(career.getDescription());
-
-                        dateText = (EditText) findViewById(R.id.editText2);
-                        dateText.setText(career.getDate());
-
-                        userMap.put("description",career);
+                    HashMap<String, Career> userMap = new HashMap<String, Career>();
 
 
-                    }
+                    titleText = (EditText) findViewById(R.id.editText3);
+                    titleText.setText(career.getTitle());
+
+                    descriptionText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+                    descriptionText.setText(career.getDescription());
+                    dateText = (EditText) findViewById(R.id.editText2);
+                    dateText.setText(career.getDate());
+
+                    userMap.put("description",career);
+
+
+                  final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                              int dayOfMonth) {
+                            // TODO Auto-generated method stub
+                            myCalendar.set(Calendar.YEAR, year);
+                            myCalendar.set(Calendar.MONTH, monthOfYear);
+                            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            updateLabel();
+                        }
+
+                    };
+
+                    dateText.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            // TODO Auto-generated method stub
+                            new DatePickerDialog(DetailActivity.this, date, myCalendar
+                                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        }
+                    });
+
 
                 }
+
+
+            }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -110,71 +137,80 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    private void updateLabel() {
 
-        getMenuInflater().inflate(R.menu.detail, menu);
-        if (FirebaseID == null) {
-            MenuItem item = menu.findItem(R.id.delContact);
-            item.setVisible(false);
-        }
-        return true;
+        String myFormat = "dd/MM/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        dateText.setText(sdf.format(myCalendar.getTime()));
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
 
-        switch (item.getItemId()) {
-            case R.id.saveContact:
+            getMenuInflater().inflate(R.menu.detail, menu);
+            if (FirebaseID == null) {
+                MenuItem item = menu.findItem(R.id.delContact);
+                item.setVisible(false);
+            }
+            return true;
+        }
 
-                save();
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
 
-                return true;
-            case R.id.delContact:
+            switch (item.getItemId()) {
+                case R.id.saveContact:
 
-                myDatabaseRef.child(FirebaseID).removeValue();
-                Toast.makeText(getApplicationContext(), "Contact successfully deleted", Toast.LENGTH_SHORT).show();
+                    save();
+
+                    return true;
+                case R.id.delContact:
+
+                    myDatabaseRef.child(FirebaseID).removeValue();
+                    Toast.makeText(getApplicationContext(), "Contact successfully deleted", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                    return true;
+
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+
+        }
+
+            public void save() {
+                String description = ((AutoCompleteTextView) findViewById(R.id.autoCompleteTextView)).getText().toString();
+                String date = ((EditText) findViewById(R.id.editText2)).getText().toString();
+                String title = ((EditText) findViewById(R.id.editText3)).getText().toString();
+
+
+                if (career == null) {
+                    career = new Career();
+
+                    career.setTitle(title);
+                    career.setDescription(description);
+                    career.setDate(date);
+
+
+
+                    myDatabaseRef.push().setValue(career);
+                    Toast.makeText(this, "Information successfully Added!!!", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    career.setTitle(title);
+                    career.setDescription(description);
+                    career.setDate(date);
+
+
+                    myDatabaseRef.child(FirebaseID).setValue(career);
+
+                    Toast.makeText(this, "Information successfully Edited!!!", Toast.LENGTH_SHORT).show();
+                }
+
                 finish();
+            }
 
-                return true;
 
-            default:
-                return super.onOptionsItemSelected(item);
         }
-
-    }
-
-    public void save() {
-        String description = ((AutoCompleteTextView) findViewById(R.id.autoCompleteTextView)).getText().toString();
-        String date = ((EditText) findViewById(R.id.editText2)).getText().toString();
-        String title = ((EditText) findViewById(R.id.editText3)).getText().toString();
-
-
-        if (career == null) {
-            career = new Career();
-
-            career.setTitle(title);
-            career.setDescription(description);
-            career.setDate(date);
-
-
-
-            myDatabaseRef.push().setValue(career);
-            Toast.makeText(this, "Information successfully Added!!!", Toast.LENGTH_SHORT).show();
-        } else {
-
-            career.setTitle(title);
-            career.setDescription(description);
-            career.setDate(date);
-
-
-            myDatabaseRef.child(FirebaseID).setValue(career);
-
-            Toast.makeText(this, "Information successfully Edited!!!", Toast.LENGTH_SHORT).show();
-        }
-
-        finish();
-    }
-
-
-}

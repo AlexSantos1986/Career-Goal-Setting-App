@@ -43,18 +43,14 @@
         app:backgroundTint="@android:color/holo_blue_light"
         app:elevation="24dp" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/fab"
+            android:focusable="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/fab"
-        android:focusable="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-
-
-
-    </ListView>
 
 
 </android.support.design.widget.CoordinatorLayout>

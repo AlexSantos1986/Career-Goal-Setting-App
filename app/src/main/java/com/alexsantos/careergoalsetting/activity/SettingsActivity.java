@@ -66,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_setting);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Add your Goal");
+        getSupportActionBar().setTitle("Your Profile");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -96,9 +96,10 @@ public class SettingsActivity extends AppCompatActivity {
                 mName.setText(name);
                 mStatus.setText(status);
 
-                //http://square.github.io/picasso/
+                    //http://square.github.io/picasso/
+                    Picasso.with(SettingsActivity.this).load(image).into(mDisplayImage);
 
-                Picasso.with(SettingsActivity.this).load(image).into(mDisplayImage);
+
 
             }
 

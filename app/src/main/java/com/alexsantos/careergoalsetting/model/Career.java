@@ -13,14 +13,19 @@ public class Career {
     private String description;
     private String date;
     private String title;
-
-
-
+    private boolean checked;
 
     public Career(){
 
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     public void setDescription(String description){
         this.description = description;

@@ -16,6 +16,7 @@ import com.alexsantos.careergoalsetting.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends BaseActivity{
 
@@ -27,7 +28,7 @@ public class MainActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FirebaseMessaging.getInstance().subscribeToTopic("android");
         mAuth = FirebaseAuth.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,8 +58,8 @@ public class MainActivity extends BaseActivity{
             Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(mainIntent);
-            finish();
 
+            finish();
         }
 
     }

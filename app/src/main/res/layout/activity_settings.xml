@@ -27,11 +27,10 @@
         android:id="@+id/circularImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/setting_status_button"
-        android:layout_alignParentTop="true"
+        android:src="@drawable/avatar_profile"
+        android:layout_above="@+id/display_name"
         android:layout_alignStart="@+id/setting_status_button"
-        android:layout_marginTop="95dp"
-        android:src="@drawable/avatar_profile" />
+        android:layout_alignEnd="@+id/setting_status_button" />
 
     <TextView
         android:id="@+id/display_name"
@@ -39,7 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="10dp"
         android:gravity="center_horizontal"
         android:text="Display Name"
         android:textSize="30dp" />
@@ -52,7 +50,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:paddingBottom="10dp"
         android:paddingLeft="50dp"
