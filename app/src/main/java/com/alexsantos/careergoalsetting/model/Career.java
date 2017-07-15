@@ -13,7 +13,7 @@ public class Career {
     private String description;
     private String date;
     private String title;
-    private boolean checked;
+    private boolean checked = false;
 
     public Career(){
 
@@ -23,9 +23,6 @@ public class Career {
         return checked;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
 
     public void setDescription(String description){
         this.description = description;

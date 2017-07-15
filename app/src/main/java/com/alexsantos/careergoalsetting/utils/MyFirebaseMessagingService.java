@@ -41,9 +41,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("title  is " + title)
+                .setContentTitle("Notification for " + title)
                 .setSmallIcon(R.drawable.alex)
-                .setContentText("your deadline date is " + date)
+                .setContentText("don't forget to complete your "+title+" goal !")
+                .setContentInfo("your deadline is on the " + date)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

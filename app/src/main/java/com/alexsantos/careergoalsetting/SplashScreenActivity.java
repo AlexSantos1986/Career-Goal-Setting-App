@@ -8,15 +8,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.alexsantos.careergoalsetting.activity.MainActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreenActivity extends Activity {
 
 
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreenmaker);
-
+        mAuth = FirebaseAuth.getInstance();
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageView);
         final Animation animation_1 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.rotate);
@@ -51,8 +54,17 @@ public class SplashScreenActivity extends Activity {
             public void onAnimationEnd(Animation animation) {
                 imageView.startAnimation(animation_3);
                 finish();
-                Intent i = new Intent(getBaseContext(),MainActivity.class);// change to login activity
-                startActivity(i);
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if(currentUser != null){
+
+                    Intent i = new Intent(getBaseContext(),MainActivity.class);// change to login activity
+                    startActivity(i);
+
+                }else{
+
+                    Intent i = new Intent(getBaseContext(),LoginActivity.class);// change to login activity
+                    startActivity(i);
+                }
             }
 
             @Override

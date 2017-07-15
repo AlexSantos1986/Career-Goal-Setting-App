@@ -3,6 +3,7 @@ package com.alexsantos.careergoalsetting.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,20 +39,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
+
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+
 import static com.alexsantos.careergoalsetting.R.layout.career;
 
 public class BaseActivity extends AppCompatActivity {
 
-   //private ListView list;
+
     private RecyclerView recycleListView;
     protected SearchView searchView;
     private String FirebaseID;
     FirebaseUser  mCurrentUser;
     Firebase mDatabaseRef;
     FirebaseRecyclerAdapter<Career, CareerViewHolder> mAdapter;
-   // private FirebaseListAdapter mAdapter;
     CareerFirebaseAdapter adapter;
-
+    MaterialProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +69,14 @@ public class BaseActivity extends AppCompatActivity {
       String current_uid = mCurrentUser.getUid();
 
         mDatabaseRef = new Firebase(Constant.FIREBASE_URL).child("Users").child(current_uid).child("description");
-       // mDatabaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(Constant.FIREBASE_URL).child("description").child(current_uid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //list = (ListView) findViewById(R.id.listView);
-        //list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
+        progressBar = (MaterialProgressBar) findViewById(R.id.progressBar);
         recycleListView = (RecyclerView) findViewById(R.id.recyclerView);
         recycleListView.setHasFixedSize(true);
         recycleListView.setLayoutManager(new LinearLayoutManager(this));
-        //final CareerFirebaseAdapter adapter = new  CareerFirebaseAdapter(this,mDatabaseRef,Career.class,  R.layout.career);
+
 
        mAdapter = new FirebaseRecyclerAdapter<Career, CareerViewHolder>(
                 Career.class,
@@ -86,10 +86,30 @@ public class BaseActivity extends AppCompatActivity {
 
         ) {
             @Override
-            public void populateViewHolder(CareerViewHolder viewHolder, Career career, int position) {
+            public void populateViewHolder(final CareerViewHolder viewHolder, final Career career, final int position) {
                 viewHolder.setTitle(career.getTitle());
                 viewHolder.setDate(career.getDate());
-                viewHolder.setCheckBox(career.isChecked());
+
+
+                viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int progressStatus = 0;
+
+                        int countList = recycleListView.getAdapter().getItemCount();
+                        int totalList;
+                        if(viewHolder.checkBox.isChecked()){
+
+                                progressBar.setProgress(50);
+                                Toast.makeText(BaseActivity.this, "Well done you achived "+(position+1)+" more goal keep going!",Toast.LENGTH_SHORT).show();
+
+
+
+                        }else{
+                            Toast.makeText(BaseActivity.this, "error",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
                 final String user_id = getRef(position).getKey();
 
@@ -97,52 +117,16 @@ public class BaseActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
-                        inte.putExtra("FirebaseID", user_id);
-                        startActivityForResult(inte, 0);
+                            Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
+                            inte.putExtra("FirebaseID", user_id);
+                            startActivityForResult(inte, 0);
+
                     }
                 });
 
-            }
-        };
-        /*
-        mAdapter = new FirebaseListAdapter<Career>(
-                this,
-                Career.class,
-                R.layout.career,mDatabaseRef
-                ) {
-            @Override
-            protected void populateView(View view, Career career, int position) {
-                //((CheckBox)view.findViewById(R.id.checkBox1)).setChecked(career.isChecked());
-                ((TextView)view.findViewById(R.id.date)).setText(career.getDate());
-                ((TextView)view.findViewById(R.id.title)).setText(career.getTitle());
 
             }
         };
-*/
-
-
-         /*
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position,
-                                        long id) {
-
-
-                    Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
-                    inte.putExtra("FirebaseID", mAdapter.getRef(position).getKey());
-                    startActivityForResult(inte, 0);
-                }
-
-
-            });
-           */
-            registerForContextMenu(recycleListView);
-
-        //Toast.makeText(BaseActivity.this,  list.getAdapter().getCount(), Toast.LENGTH_SHORT).show();
-
-
 
     }
 
@@ -191,22 +175,24 @@ public class BaseActivity extends AppCompatActivity {
 
     public void buildListView() {
 
-        //list.setAdapter(mAdapter);
-recycleListView.setAdapter(mAdapter);
+   recycleListView.setAdapter(mAdapter);
     }
 
     protected void buildSearchListView(String query) {
-        //list.setAdapter(mAdapter);
         recycleListView.setAdapter(mAdapter);
     }
 
     public static class CareerViewHolder extends RecyclerView.ViewHolder{
 
         View mView;
+       CheckBox checkBox;
+
         public CareerViewHolder(View itemView) {
             super(itemView);
 
             mView = itemView;
+            checkBox = (CheckBox) mView.findViewById(R.id.checkBox);
+
         }
 
         public void setTitle(String title){
@@ -220,13 +206,6 @@ recycleListView.setAdapter(mAdapter);
 
         }
 
-        public void setCheckBox(boolean checked){
-
-            CheckBox checkBox = (CheckBox) mView.findViewById(R.id.checkBox);
-            checkBox.setChecked(checked);
-
-
-        }
     }
 
 

@@ -22,8 +22,11 @@
 
         <me.zhanghai.android.materialprogressbar.MaterialProgressBar
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_height="60dp"
+            android:minWidth="100dp"
             android:indeterminate="true"
+            android:max="100"
             app:mpb_progressStyle="horizontal"
             style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
 

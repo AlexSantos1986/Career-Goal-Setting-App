@@ -43,11 +43,10 @@ public class DetailActivity extends AppCompatActivity {
     private EditText titleText;
     private AutoCompleteTextView descriptionText;
     private EditText dateText;
-    private CheckBox checkBox ;
     private DatabaseReference myDatabaseRef;
     FirebaseUser mCurrentUser;
     private Calendar myCalendar;
-
+    DatePickerDialog.OnDateSetListener date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,17 +90,17 @@ public class DetailActivity extends AppCompatActivity {
                     descriptionText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
                     descriptionText.setText(career.getDescription());
                     dateText = (EditText) findViewById(R.id.editText2);
+
                     dateText.setText(career.getDate());
 
                     userMap.put("description",career);
-
-
-                  final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                   date = new DatePickerDialog.OnDateSetListener() {
 
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear,
                                               int dayOfMonth) {
                             // TODO Auto-generated method stub
+
                             myCalendar.set(Calendar.YEAR, year);
                             myCalendar.set(Calendar.MONTH, monthOfYear);
                             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -109,6 +108,23 @@ public class DetailActivity extends AppCompatActivity {
                         }
 
                     };
+
+                    dateText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(career == null){
+                                // TODO Auto-generated method stub
+                                new DatePickerDialog(DetailActivity.this, date, myCalendar
+                                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                            }
+                        }
+                    });
+
+
+                }
+
+
 
                     dateText.setOnClickListener(new View.OnClickListener() {
 
@@ -122,8 +138,6 @@ public class DetailActivity extends AppCompatActivity {
                     });
 
 
-                }
-
 
             }
 
@@ -134,15 +148,19 @@ public class DetailActivity extends AppCompatActivity {
 
             });
 
+
         }
+
     }
 
     private void updateLabel() {
 
-        String myFormat = "dd/MM/yy"; //In which you need put here
+        String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         dateText.setText(sdf.format(myCalendar.getTime()));
+
+
 
     }
 
