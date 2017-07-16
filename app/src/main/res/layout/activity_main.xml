@@ -16,45 +16,48 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="88dp"
+            android:layout_height="70dp"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:layout_width="wrap_content"
+        <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_height="60dp"
-            android:minWidth="100dp"
-            android:indeterminate="true"
-            android:max="100"
-            app:mpb_progressStyle="horizontal"
-            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="10dp" />
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="top|end"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/trophy" />
 
     </android.support.design.widget.AppBarLayout>
 
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="76dp"
+        android:layout_height="81dp"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="25dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="55dp"
         android:focusable="true"
         android:src="@android:drawable/ic_menu_edit"
         app:backgroundTint="@android:color/holo_blue_light"
-        app:elevation="24dp" />
+        app:elevation="30dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/fab"
-            android:focusable="false"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fab"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>
 

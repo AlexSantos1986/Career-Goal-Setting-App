@@ -36,25 +36,13 @@
             android:name=".activity.DetailActivity"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.SearchActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/seachable" />
-        </activity>
 
         <activity android:name=".activity.BaseActivity" />
 
         <activity android:name=".activity.MainActivity" />
 
         <activity android:name=".activity.SettingsActivity"
-            android:parentActivityName=".activity.BaseActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".StatusActivity"

@@ -1,3 +1,4 @@
+/*
 package com.alexsantos.careergoalsetting.activity;
 
 import android.app.SearchManager;
@@ -40,3 +41,4 @@ public class SearchActivity extends BaseActivity {
 
 
 }
+*/

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alexsantos.careergoalsetting.LoginActivity;
@@ -54,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
     Firebase mDatabaseRef;
     FirebaseRecyclerAdapter<Career, CareerViewHolder> mAdapter;
     CareerFirebaseAdapter adapter;
-    MaterialProgressBar progressBar;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +70,14 @@ public class BaseActivity extends AppCompatActivity {
       String current_uid = mCurrentUser.getUid();
 
         mDatabaseRef = new Firebase(Constant.FIREBASE_URL).child("Users").child(current_uid).child("description");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        progressBar = (MaterialProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         recycleListView = (RecyclerView) findViewById(R.id.recyclerView);
         recycleListView.setHasFixedSize(true);
         recycleListView.setLayoutManager(new LinearLayoutManager(this));
+
 
 
        mAdapter = new FirebaseRecyclerAdapter<Career, CareerViewHolder>(
@@ -90,26 +92,35 @@ public class BaseActivity extends AppCompatActivity {
                 viewHolder.setTitle(career.getTitle());
                 viewHolder.setDate(career.getDate());
 
+            final int totalListCount = recycleListView.getAdapter().getItemCount();
 
-                viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int progressStatus = 0;
+            progressBar.setMax(totalListCount);
 
-                        int countList = recycleListView.getAdapter().getItemCount();
-                        int totalList;
-                        if(viewHolder.checkBox.isChecked()){
-
-                                progressBar.setProgress(50);
-                                Toast.makeText(BaseActivity.this, "Well done you achived "+(position+1)+" more goal keep going!",Toast.LENGTH_SHORT).show();
+               viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
 
 
+               if (viewHolder.checkBox.isChecked()) {
+               progressBar.setProgress(progressBar.getProgress() + (totalListCount / 5));
 
-                        }else{
-                            Toast.makeText(BaseActivity.this, "error",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+
+               Toast.makeText(BaseActivity.this, "Well done you achived " + (progressBar.getProgress()) + " more goal keep going!", Toast.LENGTH_SHORT).show();
+
+
+               }else{
+
+                   progressBar.setProgress(progressBar.getProgress() - (totalListCount / 5));
+
+
+                   Toast.makeText(BaseActivity.this, "Update your goal", Toast.LENGTH_SHORT).show();
+
+
+
+               }
+           }
+
+        });
 
                 final String user_id = getRef(position).getKey();
 
@@ -130,27 +141,6 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.pesqContato).getActionView();
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        searchView.setIconifiedByDefault(true);
-        return true;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater m = getMenuInflater();
-        m.inflate(R.menu.menu_context, menu);
-    }
 
 
     @Override
@@ -178,9 +168,6 @@ public class BaseActivity extends AppCompatActivity {
    recycleListView.setAdapter(mAdapter);
     }
 
-    protected void buildSearchListView(String query) {
-        recycleListView.setAdapter(mAdapter);
-    }
 
     public static class CareerViewHolder extends RecyclerView.ViewHolder{
 
