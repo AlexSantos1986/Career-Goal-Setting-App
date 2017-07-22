@@ -41,8 +41,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle("Notification for " + title)
                 .setSmallIcon(R.drawable.alex)
-                .setContentText("don't forget to complete your "+title+" goal !")
-                .setContentInfo("your deadline is on the " + date)
+                .setContentText("Don't forget to complete your "+title+" goal !")
+                .setContentInfo("Your deadline is on the " + date)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

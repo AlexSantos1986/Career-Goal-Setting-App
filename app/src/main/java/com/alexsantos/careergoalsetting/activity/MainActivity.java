@@ -3,16 +3,14 @@
 package com.alexsantos.careergoalsetting.activity;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.alexsantos.careergoalsetting.LoginActivity;
+import com.alexsantos.careergoalsetting.authentication.LoginActivity;
 import com.alexsantos.careergoalsetting.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,40 +25,40 @@ public class MainActivity extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FirebaseMessaging.getInstance().subscribeToTopic("android");
-        mAuth = FirebaseAuth.getInstance();
+    super.onCreate(savedInstanceState);
+    FirebaseMessaging.getInstance().subscribeToTopic("android");
+    mAuth = FirebaseAuth.getInstance();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 
-        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
-        myFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DetailActivity.class);
-                startActivity(i);
+    FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+    myFab.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent i = new Intent(getApplicationContext(), DetailActivity.class);
+            startActivity(i);
 
-            }
-        });
+        }
+    });
 
-        buildListView();
+    buildListView();
 
 
     }
 
     @Override
     protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser == null){
-            Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
-            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(mainIntent);
+    super.onStart();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    if(currentUser == null){
+        Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mainIntent);
 
-            finish();
-        }
+        finish();
+    }
 
     }
 
@@ -76,20 +74,19 @@ public class MainActivity extends BaseActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.logoutButton:
+        case R.id.logoutButton:
 
-                FirebaseAuth.getInstance().signOut();
-                Intent sigoutIntent = new Intent(MainActivity.this , LoginActivity.class);
-                startActivity(sigoutIntent);
-                finish();
+            FirebaseAuth.getInstance().signOut();
+            Intent sigoutIntent = new Intent(MainActivity.this , LoginActivity.class);
+            startActivity(sigoutIntent);
+            finish();
 
-                return true;
+            return true;
 
-            case R.id.account_setting:
-                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
+        case R.id.account_setting:
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
 
                 return true;
          default:

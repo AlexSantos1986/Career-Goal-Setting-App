@@ -2,7 +2,7 @@ package com.alexsantos.careergoalsetting.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.IntentSender;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alexsantos.careergoalsetting.R;
-import com.alexsantos.careergoalsetting.StatusActivity;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,16 +29,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.net.URI;
-import java.util.Random;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
+import id.zelory.compressor.Compressor;
 
 
 /**
  * Created by Alex on 17/06/2017.
  */
-
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -96,9 +95,13 @@ public class SettingsActivity extends AppCompatActivity {
                 mName.setText(name);
                 mStatus.setText(status);
 
-                    //http://square.github.io/picasso/
-                    Picasso.with(SettingsActivity.this).load(image).into(mDisplayImage);
 
+                if(!image.equals("default")){
+
+                    //http://square.github.io/picasso/
+                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.avatar_profile).into(mDisplayImage);
+
+                }
 
 
             }
@@ -131,18 +134,14 @@ public class SettingsActivity extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
-
-             /*   CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(SettingsActivity.this);
-                        */
             }
         });
 
     }
 
-    //https://github.com/ArthurHub/Android-Image-Cropper library.
-
+    /**
+     * https://github.com/ArthurHub/Android-Image-Cropper library.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -155,7 +154,6 @@ public class SettingsActivity extends AppCompatActivity {
                     .setAspectRatio(1, 1)
                     .start(this);
 
-            //Toast.makeText(SettingsActivity.this, imageUri, Toast.LENGTH_LONG).show();
         }
 
 
@@ -164,36 +162,51 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
 
-                mProgressDialog = new ProgressDialog(SettingsActivity.this);
-                mProgressDialog.setTitle("Uploading image...");
-                mProgressDialog.setMessage("Please wait whle we upload and process the image");
-                mProgressDialog.setCanceledOnTouchOutside(false);
-                mProgressDialog.show();
+            mProgressDialog = new ProgressDialog(SettingsActivity.this);
+            mProgressDialog.setTitle("Uploading image...");
+            mProgressDialog.setMessage("Please wait while we upload and process the image");
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
 
                 Uri resultUri = result.getUri();
 
-             String current_user_id = mCurrentUser.getUid();
+            String current_user_id = mCurrentUser.getUid();
+
+            File thumb = new File(resultUri.getPath());
+
+            Bitmap bitmap = new Compressor(this)
+                    .setMaxWidth(200)
+                    .setMaxHeight(200)
+                    .setQuality(75)
+                .compressToBitmap(thumb);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            byte[] thumb_byte = outputStream.toByteArray();
+
 
             StorageReference filePath = mImageStorageRef.child("profile_image").child(current_user_id +".jpg");
+            StorageReference thumb_filepath = mImageStorageRef.child("profile_image").child("thumb").child(current_user_id + ".jpg");
+
 
             filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                    if(task.isSuccessful()){
+            if(task.isSuccessful()){
 
-                       String download_url = task.getResult().getDownloadUrl().toString();
-                        mDatabaseRef.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+               String download_url = task.getResult().getDownloadUrl().toString();
+                mDatabaseRef.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
 
-                                if(task.isSuccessful()){
+                if(task.isSuccessful()){
 
-                                    mProgressDialog.dismiss();
-                                    Toast.makeText(SettingsActivity.this,"Success Uploading.", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                    mProgressDialog.dismiss();
+                    Toast.makeText(SettingsActivity.this,"Success Uploading.", Toast.LENGTH_LONG).show();
+                }
+                }
+                });
 
                     }else{
 
@@ -209,21 +222,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
     }
-/* // generate a random file each time an image is loaded.
-    public static String random(){
-        Random generator = new Random();
-        StringBuilder sb = new StringBuilder();
-        int randomLenght = generator.nextInt(15);
-        char tempChar;
-        for (int i =0; i < randomLenght; i++){
 
-            tempChar = (char) (generator.nextInt(96) +32);
-            sb.append(tempChar);
-        }
-
-        return sb.toString();
-    }
-
-*/
 }
 

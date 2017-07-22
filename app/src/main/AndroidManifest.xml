@@ -22,10 +22,10 @@
         </service>
 
         <activity
-            android:name=".RegisterActivity"
-            android:parentActivityName=".LoginActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SplashScreenActivity">
+            android:name=".authentication.RegisterActivity"
+            android:parentActivityName=".authentication.LoginActivity" />
+        <activity android:name=".authentication.LoginActivity" />
+        <activity android:name=".utils.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".activity.DetailActivity"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".activity.BaseActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".activity.BaseActivity" />
@@ -42,10 +42,10 @@
         <activity android:name=".activity.MainActivity" />
 
         <activity android:name=".activity.SettingsActivity"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".activity.BaseActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".StatusActivity"
+        <activity android:name=".activity.StatusActivity"
             android:parentActivityName=".activity.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 

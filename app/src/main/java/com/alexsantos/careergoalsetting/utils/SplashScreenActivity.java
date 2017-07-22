@@ -1,4 +1,4 @@
-package com.alexsantos.careergoalsetting;
+package com.alexsantos.careergoalsetting.utils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.alexsantos.careergoalsetting.authentication.LoginActivity;
+import com.alexsantos.careergoalsetting.R;
 import com.alexsantos.careergoalsetting.activity.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

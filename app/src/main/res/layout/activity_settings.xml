@@ -27,10 +27,11 @@
         android:id="@+id/circularImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/avatar_profile"
         android:layout_above="@+id/display_name"
+        android:layout_alignEnd="@+id/setting_status_button"
         android:layout_alignStart="@+id/setting_status_button"
-        android:layout_alignEnd="@+id/setting_status_button" />
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/avatar_profile" />
 
     <TextView
         android:id="@+id/display_name"

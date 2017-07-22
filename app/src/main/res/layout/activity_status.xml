@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#673AB7"
-    tools:context="com.alexsantos.careergoalsetting.StatusActivity">
+    tools:context="com.alexsantos.careergoalsetting.activity.StatusActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
