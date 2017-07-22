@@ -32,6 +32,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 
@@ -56,7 +58,6 @@ public class SettingsActivity extends AppCompatActivity {
     private Button mStatusButton;
     private Button mImageButton;
     private ProgressDialog mProgressDialog;
-    private Toolbar mToobar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,11 +183,11 @@ public class SettingsActivity extends AppCompatActivity {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
-            byte[] thumb_byte = outputStream.toByteArray();
+            final byte[] thumb_byte = outputStream.toByteArray();
 
 
             StorageReference filePath = mImageStorageRef.child("profile_image").child(current_user_id +".jpg");
-            StorageReference thumb_filepath = mImageStorageRef.child("profile_image").child("thumb").child(current_user_id + ".jpg");
+            final StorageReference thumb_filepath = mImageStorageRef.child("profile_image").child("thumb").child(current_user_id + ".jpg");
 
 
             filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -195,20 +196,42 @@ public class SettingsActivity extends AppCompatActivity {
 
             if(task.isSuccessful()){
 
-               String download_url = task.getResult().getDownloadUrl().toString();
-                mDatabaseRef.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
+               final String download_url = task.getResult().getDownloadUrl().toString();
+
+                UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
+
+                    String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+                if(thumb_task.isSuccessful()){
+
+                    Map update_hashMap = new HashMap();
+                    update_hashMap.put("image", download_url);
+                    update_hashMap.put("thumb_image", thumb_downloadUrl);
+
+                    mDatabaseRef.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
                 if(task.isSuccessful()){
 
                     mProgressDialog.dismiss();
                     Toast.makeText(SettingsActivity.this,"Success Uploading.", Toast.LENGTH_LONG).show();
                 }
-                }
-                });
 
-                    }else{
+                        }
+                    });
+                }else{
+
+                    Toast.makeText(SettingsActivity.this,"Error in uploaded.", Toast.LENGTH_LONG).show();
+                    mProgressDialog.dismiss();
+
+                }
+            }
+        });
+
+        }else{
 
                         Toast.makeText(SettingsActivity.this,"Error in uploaded.", Toast.LENGTH_LONG).show();
                         mProgressDialog.dismiss();
