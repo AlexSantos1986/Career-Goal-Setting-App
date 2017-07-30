@@ -76,13 +76,13 @@ protected void onCreate(Bundle savedInstanceState) {
         @Override
         public void onComplete(@NonNull Task<Void> task) {
 
-            if(task.isSuccessful()){
+    if(task.isSuccessful()){
 
-                mProgress.dismiss();
-            }else{
+        mProgress.dismiss();
+    }else{
 
-                Toast.makeText(getApplicationContext(), "There was some error in saving changes",Toast.LENGTH_LONG );
-            }
+        Toast.makeText(getApplicationContext(), "There was some error in saving changes",Toast.LENGTH_LONG );
+    }
         }
     });
 

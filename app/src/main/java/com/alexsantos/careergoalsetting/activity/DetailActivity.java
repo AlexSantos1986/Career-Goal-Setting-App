@@ -55,6 +55,22 @@ public class DetailActivity extends AppCompatActivity {
 
         myCalendar = Calendar.getInstance();
 
+
+        date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
        Firebase.setAndroidContext(this);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -89,53 +105,30 @@ public class DetailActivity extends AppCompatActivity {
 
         descriptionText = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         descriptionText.setText(career.getDescription());
-        dateText = (EditText) findViewById(R.id.editText2);
 
+        dateText = (EditText) findViewById(R.id.editText2);
         dateText.setText(career.getDate());
 
-        userMap.put("description",career);
-       date = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
-
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
-        };
+        userMap.put("description", career);
 
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(career == null){
-                    // TODO Auto-generated method stub
-                    new DatePickerDialog(DetailActivity.this, date, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                }
+
+                // TODO Auto-generated method stub
+                new DatePickerDialog(DetailActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
             }
+
+
         });
 
+    }
 
-            }
+    }
 
-    dateText.setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            new DatePickerDialog(DetailActivity.this, date, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        }
-    });
-
-}
 
     @Override
     public void onCancelled(DatabaseError databaseError) {
@@ -147,11 +140,10 @@ public class DetailActivity extends AppCompatActivity {
 
    }
 }
-
     private void updateLabel() {
 
         String myFormat = "dd/MM/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
         dateText.setText(sdf.format(myCalendar.getTime()));
 
@@ -207,7 +199,9 @@ public class DetailActivity extends AppCompatActivity {
             career.setDate(date);
 
             myDatabaseRef.push().setValue(career);
+
             Toast.makeText(this, "Information successfully Added!!!", Toast.LENGTH_SHORT).show();
+            finish();
         } else {
 
             career.setTitle(title);

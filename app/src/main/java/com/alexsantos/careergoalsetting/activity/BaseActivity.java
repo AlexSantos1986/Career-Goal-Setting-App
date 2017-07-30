@@ -45,7 +45,13 @@ public class BaseActivity extends AppCompatActivity {
 
       String current_uid = mCurrentUser.getUid();
 
-        mDatabaseRef = new Firebase(Constant.FIREBASE_URL).child("Users").child(current_uid).child("description");
+        mDatabaseRef = new Firebase(Constant.FIREBASE_URL).
+                child("Users").
+                child(current_uid).
+                child("description");
+
+
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -81,7 +87,8 @@ public class BaseActivity extends AppCompatActivity {
            progressBar.setProgress(progressBar.getProgress() + (totalListCount / 5));
 
 
-           Toast.makeText(BaseActivity.this, "Well done you achived " + (progressBar.getProgress()) + " more goal keep going!", Toast.LENGTH_SHORT).show();
+           Toast.makeText(BaseActivity.this, "Well done you achived " + (progressBar.getProgress()) +
+                   " more goal keep going!", Toast.LENGTH_SHORT).show();
 
 
            }else{

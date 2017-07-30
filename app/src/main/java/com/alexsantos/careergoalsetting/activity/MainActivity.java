@@ -26,7 +26,11 @@ public class MainActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+
     FirebaseMessaging.getInstance().subscribeToTopic("android");
+
+
     mAuth = FirebaseAuth.getInstance();
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -37,8 +41,8 @@ public class MainActivity extends BaseActivity{
     FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
     myFab.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-            Intent i = new Intent(getApplicationContext(), DetailActivity.class);
-            startActivity(i);
+    Intent i = new Intent(getApplicationContext(), DetailActivity.class);
+    startActivity(i);
 
         }
     });
@@ -53,11 +57,11 @@ public class MainActivity extends BaseActivity{
     super.onStart();
     FirebaseUser currentUser = mAuth.getCurrentUser();
     if(currentUser == null){
-        Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainIntent);
+    Intent mainIntent = new Intent(MainActivity.this, LoginActivity.class);
+    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    startActivity(mainIntent);
 
-        finish();
+    finish();
     }
 
     }
@@ -65,8 +69,8 @@ public class MainActivity extends BaseActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
 
     }
 
@@ -76,21 +80,21 @@ public class MainActivity extends BaseActivity{
         switch (item.getItemId()) {
         case R.id.logoutButton:
 
-            FirebaseAuth.getInstance().signOut();
-            Intent sigoutIntent = new Intent(MainActivity.this , LoginActivity.class);
-            startActivity(sigoutIntent);
-            finish();
+        FirebaseAuth.getInstance().signOut();
+        Intent sigoutIntent = new Intent(MainActivity.this , LoginActivity.class);
+        startActivity(sigoutIntent);
+        finish();
 
-            return true;
+        return true;
 
         case R.id.account_setting:
-            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+        Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
 
-                return true;
+        return true;
          default:
-                return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
         }
     }
     }

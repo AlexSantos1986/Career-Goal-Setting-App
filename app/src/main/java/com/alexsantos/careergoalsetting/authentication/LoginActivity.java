@@ -40,75 +40,75 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
+    setContentView(R.layout.activity_login);
+    mAuth = FirebaseAuth.getInstance();
 
-        mEmail = (EditText) findViewById(R.id.emailLoginText);
-        mPassword = (EditText) findViewById(R.id.passwordLoginText);
-        mSignin = (Button) findViewById(R.id.signinButton);
-        mRegisterNow = (TextView) findViewById(R.id.sendToRegisterButton);
-        mLoginProgressDialog = new ProgressDialog(this);
+    mEmail = (EditText) findViewById(R.id.emailLoginText);
+    mPassword = (EditText) findViewById(R.id.passwordLoginText);
+    mSignin = (Button) findViewById(R.id.signinButton);
+    mRegisterNow = (TextView) findViewById(R.id.sendToRegisterButton);
+    mLoginProgressDialog = new ProgressDialog(this);
 
 
 
-        mSignin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    mSignin.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
 
-                startLogin();
-            }
-        });
+        startLogin();
+        }
+    });
 
-        mRegisterNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendToRegisterIntent =  new Intent(LoginActivity.this, RegisterActivity.class);
-                sendToRegisterIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(sendToRegisterIntent);
-            }
-        });
+    mRegisterNow.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+    Intent sendToRegisterIntent =  new Intent(LoginActivity.this, RegisterActivity.class);
+    sendToRegisterIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    startActivity(sendToRegisterIntent);
+        }
+    });
     }
 
     // method called by the sign in button
     public void startLogin(){
 
-        final String email = mEmail.getText().toString().trim();
-        final String  password = mPassword.getText().toString().trim();
+    final String email = mEmail.getText().toString().trim();
+    final String  password = mPassword.getText().toString().trim();
 
-        if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+    if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
-            mLoginProgressDialog.setTitle("Logging In");
-            mLoginProgressDialog.setMessage("Please wait while check your credential");
-            mLoginProgressDialog.setCanceledOnTouchOutside(false);
-            mLoginProgressDialog.show();
-            loginUser(email, password);
+    mLoginProgressDialog.setTitle("Logging In");
+    mLoginProgressDialog.setMessage("Please wait while check your credential");
+    mLoginProgressDialog.setCanceledOnTouchOutside(false);
+    mLoginProgressDialog.show();
+    loginUser(email, password);
 
-        }else{
+    }else{
 
-            Toast.makeText(LoginActivity.this, "Fields can not be blank!", Toast.LENGTH_SHORT).show();
-        }
-
+    Toast.makeText(LoginActivity.this, "Fields can not be blank!", Toast.LENGTH_SHORT).show();
     }
+
+}
 
     private void loginUser(String email, String password) {
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        @Override
+        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if(task.isSuccessful()){
-                    mLoginProgressDialog.dismiss();
-                    Intent loginIntent = new Intent(LoginActivity.this,MainActivity.class);
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(loginIntent);
-                    finish();
-                }else {
-                    mLoginProgressDialog.hide();
-                    Toast.makeText(LoginActivity.this, "Cannot Sign In, Please check the form and try again!", Toast.LENGTH_SHORT).show();
-                }
+    if(task.isSuccessful()){
+    mLoginProgressDialog.dismiss();
+    Intent loginIntent = new Intent(LoginActivity.this,MainActivity.class);
+    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    startActivity(loginIntent);
+    finish();
+    }else {
+    mLoginProgressDialog.hide();
+    Toast.makeText(LoginActivity.this, "Cannot Sign In, Please check the form and try again!", Toast.LENGTH_SHORT).show();
+    }
 
-            }
-        });
+        }
+    });
 
 
     }

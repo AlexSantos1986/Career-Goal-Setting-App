@@ -23,7 +23,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         if (remoteMessage.getData().size() > 0) {
-            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("date"));
+            showNotification(remoteMessage.getData().get("title"),
+                    remoteMessage.getData().get("date"));
         }
 
         if (remoteMessage.getNotification() != null) {

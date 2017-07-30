@@ -93,8 +93,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_margin="10dp"
-        android:background="@android:color/background_light"
+        android:clickable="true"
         android:focusable="false"
+        android:background="@android:color/background_light"
         android:textSize="26sp">
 
     </EditText>

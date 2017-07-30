@@ -6,6 +6,7 @@ package com.alexsantos.careergoalsetting.utils;
 
 public interface Constant {
 
-    String FIREBASE_URL = "https://career-goal-setting-cb029.firebaseio.com/";
+   String FIREBASE_URL = "https://career-goal-setting-cb029.firebaseio.com/";
 
 }
+
